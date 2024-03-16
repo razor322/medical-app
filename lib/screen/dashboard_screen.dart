@@ -10,6 +10,11 @@ class DashBoard extends StatefulWidget {
 class _DashBoardState extends State<DashBoard> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 25, 241, 201),
+        title: Text("Dashboard?"),
+      ),
+    );
   }
 }
