@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:medical_app/screen/dashboard_screen.dart';
+import 'package:medical_app/screen/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,7 +19,7 @@ with SingleTickerProviderStateMixin{
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
     Future.delayed(Duration(seconds: 2), () {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => DashBoard()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => OnBoarding()));
     },);
   }
 
