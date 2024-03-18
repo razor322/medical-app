@@ -39,6 +39,7 @@ dependencies:
   water_drop_nav_bar:
   shared_preferences: ^2.2.2
   http: ^0.13.6
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

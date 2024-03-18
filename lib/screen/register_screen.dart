@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/const.dart';
 import 'package:medical_app/model/model_register.dart';
 import 'package:medical_app/screen/login_screen.dart';
 import 'package:http/http.dart' as http; 
@@ -24,7 +25,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       setState(() {
         isLoading = true;
       });
-      http.Response res = await http.post(Uri.parse("http://10.127.233.82/project_kesehatan/register.php"), body: {
+      http.Response res = await http.post(Uri.parse("$url/register.php"), body: {
         "fullname": fullname.text,
         "username": username.text,
         "password": password.text,

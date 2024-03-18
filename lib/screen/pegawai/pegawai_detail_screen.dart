@@ -14,7 +14,7 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
       appBar: AppBar(
         title: Text('Detail Pegawai'),
         centerTitle: true,
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 0, 170, 146),
       ),
       body: Center(
         child: Padding(
@@ -29,7 +29,7 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
                       topLeft: Radius.circular(10),
                       topRight: Radius.circular(10),
                     ),
-                    color: Colors.amber),
+                    color: Color.fromARGB(255, 0, 170, 146)),
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(

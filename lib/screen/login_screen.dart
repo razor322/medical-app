@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/const.dart';
 import 'package:medical_app/main.dart';
 import 'package:medical_app/model/model_login.dart';
 import 'package:medical_app/screen/register_screen.dart';
@@ -25,7 +26,7 @@ class _LoginScreenState extends State<LoginScreen> {
         isLoading = true;
       });
       http.Response res = await http.post(
-        Uri.parse("http://10.127.233.82/project_kesehatan/login.php"),
+        Uri.parse("$url/login.php"),
         body: {
           "username": username.text,
           "password": password.text,
