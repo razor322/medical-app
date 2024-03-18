@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medical_app/model/model_berita.dart';
 import 'package:medical_app/screen/detail_screen.dart';
 import 'package:medical_app/utils/cek_session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,18 +14,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-  // Future<List<Datum>?> getBerita() async{
-  //   try {
-  //     http.Response res = await http.get(Uri.parse('http://localhost/medicalDb/getBerita.php'));
-  //     return modelBeritaFromJson(res.body).data;
-  //   } catch (e) {
-  //     setState(() {
-  //       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()))
-  //       );
-  //     });
-  //   }
-  // }
+  String? id, username;
+  Future<List<Datum>?> getBerita() async{
+    try {
+      http.Response res = await http.get(Uri.parse('http://10.127.233.82/project_kesehatan/list_berita.php'));
+      return modelBeritaFromJson(res.body).data;
+    } catch (e) {
+      setState(() {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString()))
+        );
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getBerita();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,74 +42,64 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Color.fromARGB(255, 0, 170, 146),
       ),
 
-      // body: Container(
-      //   decoration: BoxDecoration(
-      //     gradient: LinearGradient(
-      //       colors: [Color.fromARGB(255, 0, 170, 146)],
-      //       begin: Alignment.topCenter,
-      //       end: Alignment.bottomCenter,
-      //     ),
-      //   ),
-      //   child: Column(
-      //     children: [
-      //       Padding(
-      //       padding: const EdgeInsets.all(8.0),
-      //       child: TextField(
-      //         onChanged: _searchKamus,
-      //         decoration: InputDecoration(
-      //           labelText: 'Search Keyword',
-      //           border: OutlineInputBorder(),
-      //           fillColor: Colors.white, 
-      //           filled: true, 
-      //         ),
-      //       ),
-      //     ),SizedBox(height: 20),
-      //       Expanded(
-      //         child: 
-      //         Container(
-      //                   decoration: BoxDecoration(
-      //                   color: Colors.white,
-      //                   borderRadius: BorderRadius.only(
-      //                       topLeft: Radius.circular(25),
-      //                       topRight: Radius.circular(25))),
-      //           child: ListView.builder(
-      //             itemCount: _searchResult?.length ?? _beritaList?.length ?? 0,
-      //             itemBuilder: (context, index) {
-      //               Datum? data = _searchResult?[index] ?? _beritaList?[index];
-      //               return Padding(
-      //                 padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
-      //                 child: GestureDetector(
-      //                   onTap: () {
-      //                     Navigator.push(
-      //                       context,
-      //                       MaterialPageRoute(builder: (context) => PageDetailBerita(data)),
-      //                     );
-      //                   },
-      //                   child: Card(
-      //                     child: Column(
-      //                       crossAxisAlignment: CrossAxisAlignment.start,
-      //                       children: [
-      //                         ListTile(
-      //                           title: Text(
-      //                             "${data?.judulberita}",
-      //                             style: TextStyle(
-      //                               fontWeight: FontWeight.w600,
-      //                               fontSize: 16,
-      //                               color: Colors.black,
-      //                             ),
-      //                           ),
-      //                         ),
-      //                       ],
+      // body: FutureBuilder(
+      //   future: getBerita(),
+      //   builder: (BuildContext context, AsyncSnapshot<List<Datum>?> snapshot) {
+      //     if (snapshot.hasData) {
+      //       return ListView.builder(
+      //         itemCount: snapshot.data?.length,
+      //         itemBuilder: (context, index) {
+      //           Datum? data = snapshot.data?[index];
+      //           return Padding(padding: EdgeInsets.all(10),
+      //             child: GestureDetector(
+      //               onTap: () {
+      //                 Navigator.push(context, MaterialPageRoute(builder: (context) 
+      //                 => PageDetailBerita(data)
+      //                 ));
+      //               },
+      //               child: Card(
+      //                 child: Column(
+      //                   crossAxisAlignment: CrossAxisAlignment.start,
+      //                   children: [Padding(padding: EdgeInsets.all(10),
+      //                   child: ClipRRect(
+      //                     borderRadius: BorderRadius.circular(10),
+      //                     child: Image.network(
+      //                       'http://192.168.100.8/beritadb/gambar_berita/${data?.gambarBerita}', 
+      //                     fit: BoxFit.fill,), 
+      //                       ), 
+      //                     ),ListTile(
+      //                       title: Text(
+      //                         "${data?.judul}", 
+      //                         style: TextStyle(
+      //                           fontWeight: FontWeight.w600, 
+      //                           fontSize: 16, 
+      //                           color: Colors.orange),),
+      //                     subtitle: Text( 
+      //                       "${data?.isiBerita}", 
+      //                       maxLines: 2, 
+      //                       style: TextStyle(
+      //                         fontSize: 12, 
+      //                         color: Colors.black54),
+      //                       ),
       //                     ),
-      //                   ),
+      //                   ],
       //                 ),
-      //               );
-      //             },
-      //           ),
+      //               ),
+      //             ),
+      //           );
+      //         });
+      //     } else if (snapshot.hasError){
+      //       return Center(
+      //         child: Text(snapshot.error.toString()),
+      //       );
+      //     } else {
+      //       return Center(
+      //         child: CircularProgressIndicator(
+      //           color: Colors.green,
       //         ),
-      //       ),
-      //     ],
-      //   ),
+      //       );
+      //     }
+      //   },
       // ),
     );
   }

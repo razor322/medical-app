@@ -29,7 +29,7 @@ class OnBoarding extends StatelessWidget {
           }, child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         background: [
-          Image.asset('images/hospital.jpg'),
+          Image.asset('images/rumahsakit.png'),
           Image.asset('images/medical-staff.png'),
         ],
         pageBackgroundColor: Colors.white,

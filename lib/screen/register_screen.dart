@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/model/model_register.dart';
 import 'package:medical_app/screen/login_screen.dart';
+import 'package:http/http.dart' as http; 
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -17,43 +19,43 @@ class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
 
   bool isLoading = false;
-  // Future<ResRegister?> registerAccount() async{
-  //   try {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     http.Response res = await http.post(Uri.parse("http://localhost/medicalDb/register.php"), body: {
-  //       "fullname": fullname.text,
-  //       "username": username.text,
-  //       "password": password.text,
-  //       "email": email.text,
-  //     });
-  //     ResRegister data = resRegisterFromJson(res.body);
+  Future<ResRegister?> registerAccount() async{
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      http.Response res = await http.post(Uri.parse("http://10.127.233.82/project_kesehatan/register.php"), body: {
+        "fullname": fullname.text,
+        "username": username.text,
+        "password": password.text,
+        "email": email.text,
+      });
+      ResRegister data = resRegisterFromJson(res.body);
 
-  //     if (data.value == 1) {
-  //       setState(() {
-  //         isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
-  //         Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
-  //       });
-  //     } else if (data.value == 2){
-  //       setState(() {
-  //         isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
-  //       });
-  //     } else {
-  //       setState(() {
-  //         isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
-  //       });
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
-  //     });
-  //   }
-  // }
+      if (data.value == 1) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
+          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
+        });
+      } else if (data.value == 2){
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -163,7 +165,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onPressed: () {
                             if (keyForm.currentState!.validate()) {
-                              // Implementasi registerAccount() di sini
+                              registerAccount();
                             }
                           },
                           color: Colors.lightBlue,

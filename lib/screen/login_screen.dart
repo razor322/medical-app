@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:medical_app/main.dart';
+import 'package:medical_app/model/model_login.dart';
 import 'package:medical_app/screen/register_screen.dart';
+import 'package:http/http.dart' as http;
+import 'package:medical_app/utils/cek_session.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -16,50 +19,50 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
   bool isLoading = false;
 
-  // Future<RegisterScreen?> loginAccount() async {
-  //   try {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //     http.Response res = await http.post(
-  //       Uri.parse("http://localhost/medicalDb/login.php"),
-  //       body: {
-  //         "username": username.text,
-  //         "password": password.text,
-  //       },
-  //     );
-  //     ModelLogin data = modelLoginFromJson(res.body);
-  //     if (data.value == 1) {
-  //       setState(() {
-  //         session.saveSession(data.value ?? 0, data.id ?? "", data.username ?? "");
+  Future<RegisterScreen?> loginAccount() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      http.Response res = await http.post(
+        Uri.parse("http://10.127.233.82/project_kesehatan/login.php"),
+        body: {
+          "username": username.text,
+          "password": password.text,
+        },
+      );
+      ModelLogin data = modelLoginFromJson(res.body);
+      if (data.value == 1) {
+        setState(() {
+          session.saveSession(data.value ?? 0, data.id ?? "", data.username ?? "");
 
-  //         isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text("${data.message}")),
-  //         );
-  //         Navigator.pushAndRemoveUntil(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => const PageListPegawai()),
-  //           (route) => false,
-  //         );
-  //       });
-  //     } else {
-  //       setState(() {
-  //         isLoading = false;
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text("${data.message}")),
-  //         );
-  //       });
-  //     }
-  //   } catch (e) {
-  //     setState(() {
-  //       isLoading = false;
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text(e.toString())),
-  //       );
-  //     });
-  //   }
-  // }
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("${data.message}")),
+          );
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => const BottomNavigationPage()),
+            (route) => false,
+          );
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text("${data.message}")),
+          );
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,15 +131,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => BottomNavigationPage()),
-                              (route) => false,
-                            );
-                            // if (keyForm.currentState!.validate()) {
-                            //   //Belum ada loginaccount
-                            // }
+                            if (keyForm.currentState!.validate()) {
+                              loginAccount();
+                            }
                           },
                           color: Colors.blue,
                           textColor: Colors.white,
