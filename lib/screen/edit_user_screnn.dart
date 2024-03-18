@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class EditUser extends StatefulWidget {
   const EditUser({super.key});
@@ -8,11 +9,13 @@ class EditUser extends StatefulWidget {
 }
 
 class _EditUserState extends State<EditUser> {
-  TextEditingController fullname = TextEditingController();
   TextEditingController username = TextEditingController();
-  TextEditingController email = TextEditingController();
-  TextEditingController pass = TextEditingController();
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
+
+  Future editUser() async {
+    http.Response res =
+        await http.put(Uri.parse('uri'), body: {"username": username.text});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +33,6 @@ class _EditUserState extends State<EditUser> {
             child: Column(
               children: [
                 TextFormField(
-                  controller: fullname,
-                  validator: (val) {
-                    return val!.isEmpty ? "Tidak boleh kosong" : null;
-                  },
-                  decoration: InputDecoration(
-                      labelText: "fullname",
-                      hintText: "fullname",
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.blue.shade300),
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
                   controller: username,
                   validator: (val) {
                     return val!.isEmpty ? "Tidak boleh kosong" : null;
@@ -53,39 +40,6 @@ class _EditUserState extends State<EditUser> {
                   decoration: InputDecoration(
                       labelText: "username",
                       hintText: "username",
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.blue.shade300),
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  controller: email,
-                  validator: (val) {
-                    return val!.isEmpty ? "Tidak boleh kosong" : null;
-                  },
-                  decoration: InputDecoration(
-                      labelText: "Email",
-                      hintText: "Email",
-                      border: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.blue.shade300),
-                          borderRadius: BorderRadius.circular(10))),
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                TextFormField(
-                  obscureText: true,
-                  controller: pass,
-                  validator: (val) {
-                    return val!.isEmpty ? "Tidak boleh kosong" : null;
-                  },
-                  decoration: InputDecoration(
-                      labelText: "password",
-                      hintText: "password",
                       border: OutlineInputBorder(
                           borderSide:
                               BorderSide(width: 1, color: Colors.blue.shade300),

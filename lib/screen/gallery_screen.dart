@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/const.dart';
 
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
@@ -14,7 +15,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
         appBar: AppBar(
           title: Text("Gallery"),
           centerTitle: true,
-          backgroundColor: Colors.cyan.shade300,
+          backgroundColor: color1,
         ),
         body: GridView.builder(
             itemCount: 10,
