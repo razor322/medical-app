@@ -13,7 +13,7 @@ class PageDetailBerita extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 0, 170, 146),
         title: Text(
-          data!.judul
+          data!.judul, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
       ),
       body: ListView(
