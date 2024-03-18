@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/screen/berita/home_screen.dart';
 import 'package:medical_app/screen/gallery_screen.dart';
-import 'package:medical_app/screen/home_screen.dart';
+import 'package:medical_app/screen/opening/splash_screen.dart';
 import 'package:medical_app/screen/pegawai/pegawai_screen.dart';
-import 'package:medical_app/screen/profil_screen.dart';
-import 'package:medical_app/screen/splash_screen.dart';
+import 'package:medical_app/screen/user/profil_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
 
 void main() {
