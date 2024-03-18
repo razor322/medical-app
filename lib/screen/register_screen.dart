@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:medical_app/const.dart';
-import 'package:medical_app/model/model_register.dart';
+import 'package:medical_app/model/user/model_register.dart';
 import 'package:medical_app/screen/login_screen.dart';
-import 'package:http/http.dart' as http; 
+import 'package:http/http.dart' as http;
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -20,12 +20,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
 
   bool isLoading = false;
-  Future<ResRegister?> registerAccount() async{
+  Future<ResRegister?> registerAccount() async {
     try {
       setState(() {
         isLoading = true;
       });
-      http.Response res = await http.post(Uri.parse("$url/register.php"), body: {
+      http.Response res =
+          await http.post(Uri.parse("$url/register.php"), body: {
         "fullname": fullname.text,
         "username": username.text,
         "password": password.text,
@@ -36,24 +37,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
       if (data.value == 1) {
         setState(() {
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
-          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("${data.message}")));
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => const LoginScreen()),
+              (route) => false);
         });
-      } else if (data.value == 2){
+      } else if (data.value == 2) {
         setState(() {
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("${data.message}")));
         });
       } else {
         setState(() {
           isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${data.message}")));
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("${data.message}")));
         });
       }
     } catch (e) {
       setState(() {
         isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
       });
     }
   }
@@ -78,7 +86,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   decoration: InputDecoration(
                     hintText: "FULLNAME",
-                    prefixIcon: Icon(Icons.person, color: Colors.grey,),
+                    prefixIcon: Icon(
+                      Icons.person,
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
@@ -99,7 +110,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   decoration: InputDecoration(
                     hintText: "USERNAME",
-                    prefixIcon: Icon(Icons.account_circle, color: Colors.grey,),
+                    prefixIcon: Icon(
+                      Icons.account_circle,
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
@@ -120,7 +134,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   decoration: InputDecoration(
                     hintText: "EMAIL",
-                    prefixIcon: Icon(Icons.email, color: Colors.grey,),
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,
@@ -141,7 +158,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   decoration: InputDecoration(
                     hintText: "PASSWORD",
-                    prefixIcon: Icon(Icons.lock, color: Colors.grey,),
+                    prefixIcon: Icon(
+                      Icons.lock,
+                      color: Colors.grey,
+                    ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none,

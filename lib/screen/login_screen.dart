@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medical_app/const.dart';
 import 'package:medical_app/main.dart';
-import 'package:medical_app/model/model_login.dart';
+import 'package:medical_app/model/user/model_login.dart';
 import 'package:medical_app/screen/register_screen.dart';
 import 'package:http/http.dart' as http;
 import 'package:medical_app/utils/cek_session.dart';
@@ -35,15 +35,18 @@ class _LoginScreenState extends State<LoginScreen> {
       ModelLogin data = modelLoginFromJson(res.body);
       if (data.value == 1) {
         setState(() {
-          session.saveSession(data.value ?? 0, data.id ?? "", data.username ?? "");
+          session.saveSession(
+              data.value ?? 0, data.id ?? "", data.username ?? "");
 
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text("${data.message}")),
           );
+          print(data.username ?? "");
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => const BottomNavigationPage()),
+            MaterialPageRoute(
+                builder: (context) => const BottomNavigationPage()),
             (route) => false,
           );
         });
