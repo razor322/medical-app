@@ -15,8 +15,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController username = TextEditingController();
+  TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-
+  
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -30,12 +31,13 @@ class _LoginScreenState extends State<LoginScreen> {
         body: {
           "username": username.text,
           "password": password.text,
+          "email": email.text,
         },
       );
       ModelLogin data = modelLoginFromJson(res.body);
       if (data.value == 1) {
         setState(() {
-          session.saveSession(data.value ?? 0, data.id ?? "", data.username ?? "");
+          session.saveSession(data.value ?? 0, data.id ?? "", data.username ?? "", data.email ?? "");
 
           isLoading = false;
           ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +99,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                  ),
+                  ), 
+                ), SizedBox(height: 16),
+                TextFormField(
+                  controller: email,
+                  validator: (val) {
+                    return val!.isEmpty ? "Tidak Boleh Kosong" : null;
+                  },
+                  style: TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    hintText: "E-MAIL",
+                    prefixIcon: Icon(Icons.mail, color: Colors.grey),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ), 
                 ),
                 SizedBox(height: 16),
                 TextFormField(

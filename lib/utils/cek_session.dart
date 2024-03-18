@@ -4,11 +4,12 @@ class SessionManager {
   int? value;
   String? idUser, username; 
 
-  Future<void> saveSession(int val, String id, String username) async { 
+  Future<void> saveSession(int val, String id, String username, String email) async { 
     SharedPreferences pref = await SharedPreferences.getInstance();
     pref.setInt("value", val); 
     pref.setString("id", id);
     pref.setString("username", username);
+    pref.setString("email", email);
   }
 
   Future getSession() async {
@@ -16,6 +17,7 @@ class SessionManager {
     pref.getInt("value"); 
     pref.getString("id"); 
     pref.getString("username");
+    pref.getString("email");
     return value;
   }
 

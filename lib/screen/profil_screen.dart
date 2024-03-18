@@ -14,7 +14,7 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
-  String? id, username;
+  String? id, username, email;
 
   @override
   void initState() {
@@ -27,6 +27,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
     setState(() {
       id = pref.getString("id");
       username = pref.getString("username");
+      email = pref.getString("email");
+      print(id); 
+      print(username);
+      print(email);
     });
   }
 
@@ -64,7 +68,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
               ),
               SizedBox(height: 20),
               Text(
-                'Nama Pengguna', //$username
+                '$username', //$username
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -72,7 +76,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
               ),
               SizedBox(height: 10),
               Text(
-                'kelompok7@gmail.com',
+                '$email',
                 style: TextStyle(
                   fontSize: 18,
                   color: Colors.white,
