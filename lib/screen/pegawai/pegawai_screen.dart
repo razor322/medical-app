@@ -45,8 +45,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
       setState(() {
         isLoading = true;
       });
-      http.Response res = await http
-          .get(Uri.parse('http://$url/projek_kesehatan/read_pegawai.php'));
+      http.Response res = await http.get(Uri.parse('$url/read_pegawai.php'));
       var data = jsonDecode(res.body);
       setState(() {
         for (var i in data['data']) {
