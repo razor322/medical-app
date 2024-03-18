@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medical_app/screen/user/edit_user_screnn.dart';
@@ -28,7 +30,7 @@ class _ProfilScreenState extends State<ProfilScreen> {
       id = pref.getString("id");
       username = pref.getString("username");
       email = pref.getString("email");
-      print(id); 
+      print(id);
       print(username);
       print(email);
     });

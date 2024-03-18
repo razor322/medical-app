@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:medical_app/const.dart';
 import 'package:medical_app/main.dart';
@@ -37,9 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ModelLogin data = modelLoginFromJson(res.body);
       if (data.value == 1) {
         setState(() {
-          session.saveSession(
-              data.value ?? 0, data.id ?? "", data.username ?? "");
-
           session.saveSession(data.value ?? 0, data.id ?? "",
               data.username ?? "", data.email ?? "");
 
