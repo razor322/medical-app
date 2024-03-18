@@ -11,6 +11,7 @@ class OnBoarding extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: OnBoardingSlider(
         headerBackgroundColor: Color.fromARGB(255, 0, 170, 146),
+        controllerColor: Color.fromARGB(255, 0, 170, 146),
         finishButtonText: 'REGISTER',
         finishButtonStyle: FinishButtonStyle(
           backgroundColor: Color.fromARGB(255, 0, 170, 146),
@@ -28,10 +29,10 @@ class OnBoarding extends StatelessWidget {
           }, child: Text('LOGIN', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         background: [
-          Image.asset('images/hospital.png'),
+          Image.asset('images/hospital.jpg'),
           Image.asset('images/medical-staff.png'),
         ],
-        pageBackgroundColor: Colors.grey,
+        pageBackgroundColor: Colors.white,
         totalPage: 2,
         speed: 1.8,
         pageBodies: [
