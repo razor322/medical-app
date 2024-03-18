@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medical_app/const.dart';
 import 'package:medical_app/screen/pegawai/pegawai_create_screen.dart';
+import 'package:medical_app/screen/pegawai/pegawai_detail_screen.dart';
+import 'package:medical_app/screen/pegawai/pegawai_edit_screen.dart';
 
 class PegawaiScreen extends StatefulWidget {
   const PegawaiScreen({super.key});
@@ -40,17 +42,17 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
 
   Future getPegawai() async {
     try {
-      setState(() {
-        isLoading = true;
-      });
-      http.Response res =
-          await http.get(Uri.parse('http://$url/kamusDb/getKamus.php'));
-      var data = jsonDecode(res.body);
-      setState(() {
-        for (var i in data['data']) {
-          // listBerita.add(listBerita.fromJson(i));
-        }
-      });
+      // setState(() {
+      //   isLoading = true;
+      // });
+      // http.Response res =
+      //     await http.get(Uri.parse('http://$url/kamusDb/getKamus.php'));
+      // var data = jsonDecode(res.body);
+      // setState(() {
+      //   for (var i in data['data']) {
+      //     // listBerita.add(listBerita.fromJson(i));
+      //   }
+      // });
     } catch (e) {
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -203,7 +205,13 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                     ),
                                     IconButton(
                                       tooltip: "edit data",
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PegawaiEditScreen()));
+                                      },
                                       icon: Icon(
                                         Icons.edit,
                                         color: Colors.yellow.shade800,
@@ -212,7 +220,13 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                     ),
                                     IconButton(
                                       tooltip: "lihat data",
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PegawaiDetail()));
+                                      },
                                       icon: Icon(
                                         Icons.info_outline_rounded,
                                         color: Colors.green,
