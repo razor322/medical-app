@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:medical_app/screen/gallery_screen.dart';
 import 'package:medical_app/screen/home_screen.dart';
-import 'package:medical_app/screen/pegawai_screen.dart';
+import 'package:medical_app/screen/pegawai/pegawai_screen.dart';
 import 'package:medical_app/screen/profil_screen.dart';
 import 'package:medical_app/screen/splash_screen.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
@@ -18,10 +18,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Medical App',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 0, 170, 146)),
+        colorScheme:
+            ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 0, 170, 146)),
         useMaterial3: true,
       ),
-      home: const BottomNavigationPage(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -34,7 +35,8 @@ class BottomNavigationPage extends StatefulWidget {
   State<BottomNavigationPage> createState() => _BottomNavigationPageState();
 }
 
-class _BottomNavigationPageState extends State<BottomNavigationPage> with SingleTickerProviderStateMixin{
+class _BottomNavigationPageState extends State<BottomNavigationPage>
+    with SingleTickerProviderStateMixin {
   int selectedIndex = 0;
   late TabController tabController;
 
@@ -48,12 +50,17 @@ class _BottomNavigationPageState extends State<BottomNavigationPage> with Single
       });
     });
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: TabBarView(
-        children: [HomeScreen(), PegawaiScreen(), GalleryScreen(), ProfilScreen()],
+        children: [
+          HomeScreen(),
+          GalleryScreen(),
+          PegawaiScreen(),
+          ProfilScreen()
+        ],
         physics: const NeverScrollableScrollPhysics(),
         controller: tabController,
       ),

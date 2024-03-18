@@ -10,6 +10,21 @@ class GalleryScreen extends StatefulWidget {
 class _GalleryScreenState extends State<GalleryScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+        appBar: AppBar(
+          title: Text("Gallery"),
+          centerTitle: true,
+          backgroundColor: Colors.cyan.shade300,
+        ),
+        body: GridView.builder(
+            itemCount: 10,
+            padding: EdgeInsets.all(5),
+            gridDelegate:
+                SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            itemBuilder: (context, index) {
+              return Card(
+                child: Image.asset('name'),
+              );
+            }));
   }
 }

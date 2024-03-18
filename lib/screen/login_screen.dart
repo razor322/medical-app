@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:medical_app/main.dart';
 import 'package:medical_app/screen/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -118,7 +119,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 SizedBox(height: 32),
-                isLoading ? Center(child: CircularProgressIndicator())
+                isLoading
+                    ? Center(child: CircularProgressIndicator())
                     : SizedBox(
                         width: double.infinity,
                         child: MaterialButton(
@@ -126,9 +128,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           onPressed: () {
-                            if (keyForm.currentState!.validate()) {
-                              //Belum ada loginaccount
-                            }
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BottomNavigationPage()),
+                              (route) => false,
+                            );
+                            // if (keyForm.currentState!.validate()) {
+                            //   //Belum ada loginaccount
+                            // }
                           },
                           color: Colors.blue,
                           textColor: Colors.white,

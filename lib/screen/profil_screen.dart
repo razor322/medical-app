@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medical_app/screen/edit_user_screnn.dart';
 import 'package:medical_app/screen/login_screen.dart';
 import 'package:medical_app/utils/cek_session.dart';
 import 'package:water_drop_nav_bar/water_drop_nav_bar.dart';
@@ -14,7 +15,6 @@ class ProfilScreen extends StatefulWidget {
 
 class _ProfilScreenState extends State<ProfilScreen> {
   String? id, username;
-
 
   @override
   void initState() {
@@ -36,7 +36,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          padding: const EdgeInsets.all(16.0), // Tambahkan padding di sini jika diperlukan
+          padding: const EdgeInsets.all(
+              16.0), // Tambahkan padding di sini jika diperlukan
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 0, 170, 146),
             borderRadius: BorderRadius.only(
@@ -58,7 +59,8 @@ class _ProfilScreenState extends State<ProfilScreen> {
               SizedBox(height: 20),
               CircleAvatar(
                 radius: 50,
-                backgroundImage: AssetImage('images/medical-staff.png'), // Ganti dengan gambar avatar pengguna
+                backgroundImage: AssetImage(
+                    'images/medical-staff.png'), // Ganti dengan gambar avatar pengguna
               ),
               SizedBox(height: 20),
               Text(
@@ -78,7 +80,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EditUser()));
+                },
                 child: Text('Edit Profile'),
               ),
               SizedBox(height: 10),
@@ -86,9 +91,10 @@ class _ProfilScreenState extends State<ProfilScreen> {
                 onPressed: () {
                   setState(() {
                     session.clearSession();
-                    Navigator.pushAndRemoveUntil(context, 
-                    MaterialPageRoute(builder: (context) => LoginScreen()), 
-                    (route) => false);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                        (route) => false);
                   });
                 },
                 style: ElevatedButton.styleFrom(
