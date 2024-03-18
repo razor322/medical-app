@@ -5,7 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medical_app/const.dart';
-import 'package:medical_app/model/model_pegawai.dart';
+import 'package:medical_app/model/pegawai/model_delete_pegawai.dart';
+import 'package:medical_app/model/pegawai/model_pegawai.dart';
 import 'package:medical_app/screen/pegawai/pegawai_create_screen.dart';
 import 'package:medical_app/screen/pegawai/pegawai_detail_screen.dart';
 import 'package:medical_app/screen/pegawai/pegawai_edit_screen.dart';
@@ -21,23 +22,14 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
   TextEditingController txtcari = TextEditingController();
   bool isCari = false;
   bool isLoading = false;
-  List<Datum?> listPegawai = [];
-  List<String> filterData = [];
+  late List<Datum> _allPegawai = [];
+  late List<Datum> _searchResult = [];
 
-  _PegawaiScreenState() {
-    txtcari.addListener(() {
-      if (txtcari.text.isEmpty) {
-        setState(() {
-          isCari = true;
-          txtcari.text = "";
-        });
-      } else {
-        setState(() {
-          isCari = false;
-          txtcari.text != "";
-        });
-      }
-    });
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPegawai();
+    super.initState();
   }
 
   Future<List<Datum>?> getPegawai() async {
@@ -46,11 +38,10 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
         isLoading = true;
       });
       http.Response res = await http.get(Uri.parse('$url/read_pegawai.php'));
-      var data = jsonDecode(res.body);
+      List<Datum> data = modelPegawaiFromJson(res.body).data ?? [];
       setState(() {
-        for (var i in data['data']) {
-          listPegawai.add(Datum.fromJson(i));
-        }
+        _allPegawai = data;
+        _searchResult = data;
       });
     } catch (e) {
       setState(() {
@@ -62,33 +53,63 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
     }
   }
 
-  Future<void> deletePegawai() async {
+  Future<void> deletePegawai(int id) async {
     try {
       setState(() {
         isLoading = false;
       });
+
       http.Response res =
-          await http.delete(Uri.parse('http://$url/kamusDb/getKamus.php'));
-      var data = jsonDecode(res.body);
-      setState(() {
-        getPegawai();
-      });
+          await http.delete(Uri.parse('$url/delete_pegawai.php?id=$id'));
+
+      // Periksa apakah permintaan berhasil (status kode 200)
+      if (res.statusCode == 200) {
+        // Parsing respon dari JSON ke objek ModelDeletePegawai
+        ModelDeletePegawai data = modelDeletePegawaiFromJson(res.body);
+
+        if (data.value == 1) {
+          setState(() {
+            // Hapus pegawai dari _searchResult berdasarkan ID
+            _searchResult.removeWhere((pegawai) => pegawai.id == id.toString());
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('${data.message}')),
+            );
+          });
+
+          // Panggil kembali _filterBerita untuk memperbarui tampilan berdasarkan pencarian yang saat ini ada
+          _filterBerita(txtcari.text);
+          setState(() {
+            getPegawai();
+          });
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${data.message}')),
+          );
+        }
+      } else {
+        // Menampilkan pesan kesalahan jika permintaan tidak berhasil
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal menghapus pegawai')),
+        );
+      }
     } catch (e) {
       setState(() {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(e.toString()),
-        ));
-        print(e.toString());
+        isLoading = false;
       });
-      print(e);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
     }
   }
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getPegawai();
+  void _filterBerita(String query) {
+    List<Datum> filteredBerita = _allPegawai
+        .where((pegawai) =>
+            pegawai.nama!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    setState(() {
+      _searchResult = filteredBerita;
+    });
   }
 
   @override
@@ -112,23 +133,12 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextFormField(
+              onChanged: _filterBerita,
               controller: txtcari,
               decoration: InputDecoration(
                 prefixIcon: Padding(
                   padding: const EdgeInsets.only(left: 10),
                   child: Icon(Icons.search),
-                ),
-                suffixIcon: Tooltip(
-                  message: "Clear search",
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 5),
-                    child: IconButton(
-                      onPressed: () {
-                        txtcari.clear();
-                      },
-                      icon: Icon(Icons.clear_outlined),
-                    ),
-                  ),
                 ),
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
@@ -173,8 +183,9 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: listPegawai.length,
+                      itemCount: _searchResult.length,
                       itemBuilder: (context, index) {
+                        Datum data = _searchResult[index];
                         return GestureDetector(
                           onTap: () {},
                           child: Padding(
@@ -195,7 +206,13 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                   children: [
                                     IconButton(
                                       tooltip: "hapus data",
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        // Mengonversi ID dari string ke integer
+                                        int idToDelete =
+                                            int.parse(_searchResult[index].id);
+                                        // Panggil fungsi deletePegawai dengan ID pegawai
+                                        deletePegawai(idToDelete);
+                                      },
                                       icon: Icon(
                                         Icons.delete,
                                         color: Colors.red,
@@ -209,7 +226,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PegawaiEditScreen()));
+                                                    PegawaiEditScreen(data)));
                                       },
                                       icon: Icon(
                                         Icons.edit,
@@ -224,7 +241,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PegawaiDetail()));
+                                                    PegawaiDetail(data)));
                                       },
                                       icon: Icon(
                                         Icons.info_outline_rounded,
@@ -234,15 +251,15 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                     ),
                                   ],
                                 ),
-                                title: Text("${listPegawai[index]?.nama}"),
-                                subtitle: Text("${listPegawai[index]?.email}"),
+                                title: Text("${data.nama}"),
+                                subtitle: Text("${data.email}"),
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -250,60 +267,5 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
         ],
       ),
     );
-  }
-  // Widget createFilterList() {
-  //   filterData = [];
-  //   for (int i = 0; i < listKamus.length; i++) {
-  //     var item = listKamus[i];
-  //     if (item!.kataIndonesia
-  //         .toLowerCase()
-  //         .contains(txtcari.text.toLowerCase())) {
-  //       filterData.add(item!.kataIndonesia);
-  //     }
-  //   }
-  //   return HasilSearch();
-  // }
-
-  Widget HasilSearch() {
-    return Expanded(
-        child: Container(
-      decoration: BoxDecoration(
-          color: Colors.purple.shade200,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(25), topRight: Radius.circular(25))),
-      child: Padding(
-        padding: const EdgeInsets.only(top: 25),
-        child: ListView.builder(
-            itemCount: filterData.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    // Datum? data = listKamus.firstWhere(
-                    //   (element) => element?.kataIndonesia == filterData[index],
-                    // );
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => PageDetail(data)));
-                  },
-                  child: ListTile(
-                    minLeadingWidth: 15,
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.blue.shade200,
-                      child: Icon(
-                        Icons.person,
-                        size: 25,
-                      ),
-                    ),
-                    title: Text("nama1"),
-                    subtitle: Text("nama2"),
-                  ),
-                ),
-              );
-            }),
-      ),
-    ));
   }
 }

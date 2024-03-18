@@ -1,13 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
 
-class PegawaiDetail extends StatefulWidget {
-  const PegawaiDetail({super.key});
+import 'package:medical_app/model/pegawai/model_pegawai.dart';
 
-  @override
-  State<PegawaiDetail> createState() => _PegawaiDetailState();
-}
+class PegawaiDetail extends StatelessWidget {
+  final Datum? data;
 
-class _PegawaiDetailState extends State<PegawaiDetail> {
+  const PegawaiDetail(
+    this.data,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +27,7 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
             children: [
               Container(
                 width: double.infinity,
-                height: 140,
+                height: 130,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10),
@@ -42,11 +46,11 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
                         ),
                       ),
                       Text(
-                        "nama",
+                        "nama : ${data?.nama} ",
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w500),
                       ),
-                      Text("email",
+                      Text("email ${data?.email}",
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w500))
                     ],
@@ -55,7 +59,7 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
               ),
               Container(
                 width: double.infinity,
-                height: 80,
+                height: 100,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10),
@@ -68,10 +72,10 @@ class _PegawaiDetailState extends State<PegawaiDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("no hp",
+                      Text("no hp ; ${data?.noHp}",
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500)),
-                      Text("no bp",
+                      Text("no bp ${data?.noBp}",
                           style: TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w500))
                     ],

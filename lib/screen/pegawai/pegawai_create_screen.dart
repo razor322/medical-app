@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:medical_app/const.dart';
+import 'package:medical_app/model/pegawai/model_create_pegawai.dart';
+import 'package:medical_app/screen/pegawai/pegawai_screen.dart';
 
 class PegawaiCreateScreen extends StatefulWidget {
   const PegawaiCreateScreen({super.key});
@@ -17,43 +20,44 @@ class _PegawaiCreateScreenState extends State<PegawaiCreateScreen> {
   bool isLoading = false;
 
 // <modelTambahPegawai>
-  Future tambahPegawai() async {
+  Future<ModelAddPegawai?> tambahPegawai() async {
     try {
       setState(() {
         isLoading = true;
       });
-      http.Response res = await http.post(Uri.parse('uri'), body: {
+      http.Response res =
+          await http.post(Uri.parse('$url/create_pegawai.php'), body: {
         "nama": nama.text,
+        "no_bp": noBP.text,
+        "no_hp": noHP.text,
         "email": email.text,
-        "noBP": noBP.text,
-        "nohp": noHP.text,
       });
-      // ModelRegister data = modelRegisterFromJson(res.body);
+      ModelAddPegawai data = modelAddPegawaiFromJson(res.body);
 
-      // if (data.value == 1 && data.value != null) {
-      //   setState(() {
-      //     isLoading = false;
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(SnackBar(content: Text('${data.message}')));
-      //   });
+      if (data.value == 1 && data.value != null) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${data.message}')));
+        });
 
-      //   Navigator.pushAndRemoveUntil(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => PageLogin()),
-      //       (route) => false);
-      // } else if (data.value == 2 && data.value != null) {
-      //   setState(() {
-      //     isLoading = false;
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(SnackBar(content: Text('${data.message}')));
-      //   });
-      // } else {
-      //   setState(() {
-      //     isLoading = false;
-      //     ScaffoldMessenger.of(context)
-      //         .showSnackBar(SnackBar(content: Text('${data.message}')));
-      //   });
-      // }
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => PegawaiScreen()),
+            (route) => false);
+      } else if (data.value == 2 && data.value != null) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${data.message}')));
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${data.message}')));
+        });
+      }
     } catch (e) {
       setState(() {
         isLoading = false;
