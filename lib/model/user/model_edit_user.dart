@@ -13,14 +13,16 @@ class ModelEditUser {
   bool isSuccess;
   int value;
   String message;
-  String fullname;
+  String username;
+  String email;
   String id;
 
   ModelEditUser({
     required this.isSuccess,
     required this.value,
     required this.message,
-    required this.fullname,
+    required this.username,
+    required this.email,
     required this.id,
   });
 
@@ -28,7 +30,8 @@ class ModelEditUser {
         isSuccess: json["is_success"],
         value: json["value"],
         message: json["message"],
-        fullname: json["fullname"],
+        username: json["username"],
+        email: json["email"],
         id: json["id"],
       );
 
@@ -36,7 +39,8 @@ class ModelEditUser {
         "is_success": isSuccess,
         "value": value,
         "message": message,
-        "fullname": fullname,
+        "username": username,
+        "email": email,
         "id": id,
       };
 }
