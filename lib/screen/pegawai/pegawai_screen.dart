@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:medical_app/const.dart';
+import 'package:medical_app/model/model_pegawai.dart';
 import 'package:medical_app/screen/pegawai/pegawai_create_screen.dart';
 import 'package:medical_app/screen/pegawai/pegawai_detail_screen.dart';
 import 'package:medical_app/screen/pegawai/pegawai_edit_screen.dart';
@@ -20,8 +21,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
   TextEditingController txtcari = TextEditingController();
   bool isCari = false;
   bool isLoading = false;
-  // List<Data?> listBerita = [];
-  // List<Data?> listBerita = [];
+  List<Datum?> listPegawai = [];
   List<String> filterData = [];
 
   _PegawaiScreenState() {
@@ -40,19 +40,19 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
     });
   }
 
-  Future getPegawai() async {
+  Future<List<Datum>?> getPegawai() async {
     try {
-      // setState(() {
-      //   isLoading = true;
-      // });
-      // http.Response res =
-      //     await http.get(Uri.parse('http://$url/kamusDb/getKamus.php'));
-      // var data = jsonDecode(res.body);
-      // setState(() {
-      //   for (var i in data['data']) {
-      //     // listBerita.add(listBerita.fromJson(i));
-      //   }
-      // });
+      setState(() {
+        isLoading = true;
+      });
+      http.Response res = await http
+          .get(Uri.parse('http://$url/projek_kesehatan/read_pegawai.php'));
+      var data = jsonDecode(res.body);
+      setState(() {
+        for (var i in data['data']) {
+          listPegawai.add(Datum.fromJson(i));
+        }
+      });
     } catch (e) {
       setState(() {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -174,7 +174,7 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                   ),
                   Expanded(
                     child: ListView.builder(
-                      itemCount: 15,
+                      itemCount: listPegawai.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {},
@@ -235,8 +235,8 @@ class _PegawaiScreenState extends State<PegawaiScreen> {
                                     ),
                                   ],
                                 ),
-                                title: Text("nama1"),
-                                subtitle: Text("nama2"),
+                                title: Text("${listPegawai[index]?.nama}"),
+                                subtitle: Text("${listPegawai[index]?.email}"),
                               ),
                             ),
                           ),
