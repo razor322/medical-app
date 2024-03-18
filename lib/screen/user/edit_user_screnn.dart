@@ -16,7 +16,7 @@ class EditUser extends StatefulWidget {
 }
 
 class _EditUserState extends State<EditUser> {
-  String? id, username;
+  String? id, username, email;
   TextEditingController txtusername = TextEditingController();
   GlobalKey<FormState> keyForm = GlobalKey<FormState>();
   bool isLoading = false;
@@ -25,84 +25,58 @@ class _EditUserState extends State<EditUser> {
     setState(() {
       id = pref.getString("id") ?? '';
       username = pref.getString("username") ?? '';
+      email = pref.getString("email") ?? '';
       print("id $id");
       print("id $username");
     });
+  }
+
+  Future<ModelEditUser?> editUser() async {
+    try {
+      setState(() {
+        isLoading = true;
+      });
+      http.Response res =
+          await http.post(Uri.parse('$url/updateUser.php'), body: {
+        "id": '$id',
+        "username": txtusername.text,
+      });
+      ModelEditUser data = modelEditUserFromJson(res.body);
+      if (data.value == 1) {
+        setState(() {
+          isLoading = false;
+          session.saveSession(
+            data.value ?? 0,
+            data.id ?? "",
+            data.username ?? "",
+            email ?? "",
+          );
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${data.message}')));
+        });
+        Navigator.pop(context);
+      } else if (data.value == 2) {
+        setState(() {
+          isLoading = false;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('${data.message}')));
+        });
+      }
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(e.toString())));
+      });
+    }
   }
 
   void initState() {
     // TODO: implement initState
     super.initState();
     getSession();
-    initializeData();
-
-    // txtusername = TextEditingController(text: username ?? "kosong");
-
     print(id);
     print(username);
-  }
-
-  Future<void> initializeData() async {
-    await getSession(); // tunggu sampai getSession selesai
-    txtusername = TextEditingController(text: username ?? "kosong");
-    print(id);
-    print(username);
-  }
-
-  Future<void> editUser() async {
-    try {
-      setState(() {
-        isLoading = true;
-        print("id edit $id");
-        print("username edit $username");
-      });
-
-      // Memastikan variabel id dan username sudah diinisialisasi
-      if (id != null && username != null) {
-        // await initializeData(); // tunggu hingga nilai-nilai diinisialisasi
-        username = txtusername.text;
-        http.Response res = await http.post(Uri.parse('$url/updateUser.php'),
-            body: {"id": id, "username": username});
-        ModelEditUser data = modelEditUserFromJson(res.body);
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilScreen()),
-            (route) => false);
-        if (data.value != null && data.value == 1) {
-          setState(() {
-            isLoading = false;
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('${data.message}')));
-            print("data");
-            print("id edit2 $id");
-            print("username2 edit $username");
-          });
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => ProfilScreen()),
-              (route) => false);
-        } else {
-          setState(() {
-            isLoading = false;
-            ScaffoldMessenger.of(context)
-                .showSnackBar(SnackBar(content: Text('${data.message}')));
-          });
-        }
-      } else {
-        setState(() {
-          isLoading = false;
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text("ID atau username belum diinisialisasi")));
-        });
-      }
-    } catch (e) {
-      setState(() {
-        isLoading = false;
-        // ScaffoldMessenger.of(context)
-        //     .showSnackBar(SnackBar(content: Text(e.toString())));
-        print(e.toString());
-      });
-    }
   }
 
   @override
@@ -146,11 +120,6 @@ class _EditUserState extends State<EditUser> {
                     if (keyForm.currentState?.validate() == true) {
                       setState(() {
                         editUser();
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ProfilScreen()),
-                            (route) => false);
                       });
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
