@@ -22,6 +22,11 @@ class _ProfilScreenState extends State<ProfilScreen> {
   void initState() {
     super.initState();
     getSession();
+    updateProfile();
+  }
+
+  void updateProfile() {
+    getSession(); // Panggil kembali fungsi getSession untuk memperbarui data
   }
 
   Future<void> getSession() async {
